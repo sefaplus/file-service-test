@@ -1,19 +1,19 @@
-import Server from "./src/server";
+import Server from './src/server';
 
 Server.startApp();
 
-process.on("SIGINT", () => {
+process.on('SIGINT', () => {
   process.exit(1);
 });
 
-process.on("SIGTERM", () => {
+process.on('SIGTERM', () => {
   process.exit(1);
 });
 
-process.on("unhandledRejection", (e) => {
+process.on('unhandledRejection', () => {
   process.exit(1);
 });
 
-process.on("uncaughtException", (e) => {
+process.on('uncaughtException', () => {
   process.exit(1);
 });

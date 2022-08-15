@@ -1,13 +1,17 @@
-import multer from "multer";
-
-export const localUpload = multer({ dest: "tmp/" });
+import { CONFIG } from '../constants/config';
+import { STORAGE_TYPES } from '../constants/enums';
+import { LocalStorage } from '../service/localStorageService';
 export class FileStorageAdapter {
-  static async getFile(filename: string) {
+  static get() {
     try {
-    } catch (err) {}
-  }
-  static async saveFile(binary: Buffer, filename: string, metadata: object) {
-    try {
-    } catch (err) {}
+      switch (CONFIG.STORAGE.TYPE) {
+        case STORAGE_TYPES.LOCAL:
+          return new LocalStorage();
+        default:
+          return new LocalStorage();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
