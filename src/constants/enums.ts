@@ -19,7 +19,6 @@ export enum STORAGE_TYPES {
   LOCAL = 'LOCAL',
   FTP = 'FTP',
   WS = 'WS',
-  OTHER = 'OTHER',
 }
 
 export enum AnswerStatuses {
