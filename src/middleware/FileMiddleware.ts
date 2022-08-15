@@ -1,35 +1,43 @@
 import { NextFunction, Request, Response } from 'express';
+import { InnerError } from '../constants';
 import { CONFIG } from '../constants/config';
 import { ALLOWED_FILE_TYPES } from '../constants/enums';
+import { ERROR_MESSAGE } from '../constants/errorMessages';
 /**
- * Checks recieved binary file for allowed extension, and size.
+ * Checks recieved binary file for allowed extension, and size. Then writes new Content-Length header size, and sets body as buffer of file
  *   */
-export function fileMiddleware(req: Request, res: Response, next: NextFunction) {
+export async function fileMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
+    const allowedExtensions = Object.values(ALLOWED_FILE_TYPES);
+    const recievedExtension = req.headers['content-type'] as ALLOWED_FILE_TYPES;
+
+    /* If header Content-Type of not allowed extensions, throw err */
+    if (!allowedExtensions.includes(recievedExtension)) throw new InnerError(ERROR_MESSAGE.EXTENSION_DISALLOWED);
+
     /* Array of chunks of data */
     const data: Uint8Array[] = [];
-    /* Buffer to return */
-    let buffer: Buffer = Buffer.alloc(0);
+    /* File buffer */
+    const buffer: Buffer = await new Promise((resolve) => {
+      req
+        .on('data', function (chunk: Uint8Array) {
+          data.push(chunk);
+        })
+        .on('end', function () {
+          const buffer = Buffer.concat(data);
 
-    /* If header Content-Type not of allowed type, throw error. Actual file extenstion is not checked, but could be implemented by reading magic numbers */
-    if (!Object.values(ALLOWED_FILE_TYPES).includes(req.headers['content-type'] as ALLOWED_FILE_TYPES))
-      throw new Error('File extension is not allowed');
-
-    req.on('data', function (chunk: Uint8Array) {
-      data.push(chunk);
+          resolve(buffer);
+        });
     });
 
-    req.on('end', function () {
-      buffer = Buffer.concat(data);
-    });
+    if (buffer.length > CONFIG.STORAGE.MAX_FILE_SIZE_BYTES)
+      throw new InnerError(`${ERROR_MESSAGE.SIZE_EXCEEDED} Must be <${CONFIG.STORAGE.MAX_FILE_SIZE_BYTES / 1048576}mb`);
 
-    if (buffer.length < CONFIG.STORAGE.MAX_FILE_SIZE_BYTES)
-      throw new Error(`Maximum file size is exceeded. Allowed (<${CONFIG.STORAGE.MAX_FILE_SIZE_BYTES / 1048576}mb)`);
+    /* Writing new content-length size, to avoid confusion */
     req.headers['content-length'] = buffer.length.toString();
+    /* Writing buffer to body */
     req.body = buffer;
     next();
   } catch (err) {
-    console.log(err);
-    res.send('NOT ALLOWED');
+    return next(err);
   }
 }

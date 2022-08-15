@@ -21,3 +21,8 @@ export enum STORAGE_TYPES {
   WS = 'WS',
   OTHER = 'OTHER',
 }
+
+export enum AnswerStatuses {
+  SUCCESS = 'success',
+  ERROR = 'error',
+}

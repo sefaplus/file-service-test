@@ -9,7 +9,6 @@ export class FileStorageController {
   static async saveFile(req: Request, res: Response) {
     try {
       const storage = FileStorageAdapter.get();
-
       if (!storage) throw new Error('NO STORAGE FOUND');
 
       const [content_type, content_length] = [req.headers['content-type'], req.headers['content-length']];
