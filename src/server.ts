@@ -1,8 +1,6 @@
-import express, { Application } from "express";
-import bodyParser from "body-parser";
-import formData from "express-form-data";
-import * as cookieParser from "cookie-parser";
-import { fileStorageRouter } from "./routers/fileStorage.router";
+import express, { Application } from 'express';
+import { CONFIG } from './constants/config';
+import { fileStorageRouter } from './routers/fileStorage.router';
 export default class Server {
   private static app: Application;
 
@@ -14,8 +12,8 @@ export default class Server {
 
   public static async startApp() {
     Server.initServer();
-    Server.app.listen(5000, () => {
-      console.log("SERVER STARTED");
+    Server.app.listen(CONFIG.SERVER.PORT, () => {
+      console.log('SERVER STARTED');
     });
   }
 
@@ -34,7 +32,7 @@ export default class Server {
 
   static applyRouters() {
     Server.app.use(
-      "/files",
+      '/files',
       //   bodyParser.raw({ type: "application/octet-stream", limit: "2mb" }),
       fileStorageRouter
     );
