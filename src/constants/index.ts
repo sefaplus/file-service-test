@@ -1,5 +1,3 @@
-export * from './enums';
-export * from './config';
-export * from './errorTypes';
-export * from './serverStatusCodes';
+export * from '../config/config';
+export * from '../errors/errorTypes';
 export * from './Messages';

@@ -1,11 +1,12 @@
 import express, { Application } from 'express';
 import { Logger } from 'tslog';
-import { CONFIG } from './constants/config';
+import { CONFIG } from './config';
 import { childLogger } from './helpers';
 import { ErrorHandler } from './middleware/';
-import { fileStorageRouter } from './routers/fileStorage.router';
+import { fileRouter } from './routers/fileStorage.router';
+
 export default class Server {
-  private static readonly log: Logger = childLogger('FileStorageController');
+  private static readonly log: Logger = childLogger('ServerLog');
   private static app: Application;
 
   private static initServer() {
@@ -28,7 +29,7 @@ export default class Server {
   }
 
   static applyRouters() {
-    Server.app.use('/files', fileStorageRouter);
+    Server.app.use('/files', fileRouter);
   }
   static applyErrorHandler() {
     Server.app.use(ErrorHandler.globalErrorHandler);

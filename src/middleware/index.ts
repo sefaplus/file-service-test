@@ -1,2 +1,2 @@
-export * from './FileMiddleware';
+export * from './fileMiddleware';
 export * from './globalErrorHandler';

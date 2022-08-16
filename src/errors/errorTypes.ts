@@ -1,4 +1,4 @@
-import { ServerStatusCodes } from './serverStatusCodes';
+import { ServerStatusCodes } from '../types';
 
 export class InnerError extends Error {
   public status = ServerStatusCodes.BAD_REQUEST;

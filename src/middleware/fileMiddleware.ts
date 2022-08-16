@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { ALLOWED_FILE_TYPES, CONFIG, MESSAGE, InnerError } from '../constants';
+import { CONFIG, ErrorMessages, InnerError } from '../constants';
+import { AllowedFileTypes } from '../types';
 
 export class FileMiddleware {
   /**
@@ -7,14 +8,14 @@ export class FileMiddleware {
    *   */
   static async validate(req: Request, res: Response, next: NextFunction) {
     try {
-      const allowedContentTypes = Object.values(ALLOWED_FILE_TYPES);
-      const recievedContentTypes = req.headers['content-type'] as ALLOWED_FILE_TYPES;
+      const allowedContentTypes = Object.values(AllowedFileTypes);
+      const recievedContentTypes = req.headers['content-type'] as AllowedFileTypes;
 
-      if (!recievedContentTypes) throw new InnerError(MESSAGE.ERROR.HEADER.CONTENT_TYPE_CANNOT_BE_NULL);
+      if (!recievedContentTypes) throw new InnerError(ErrorMessages.HEADER.CONTENT_TYPE_CANNOT_BE_NULL);
 
       /* If header Content-Type of not allowed extensions, throw err */
       if (!allowedContentTypes.includes(recievedContentTypes))
-        throw new InnerError(MESSAGE.ERROR.FILE.EXTENSION_DISALLOWED);
+        throw new InnerError(ErrorMessages.FILE.EXTENSION_DISALLOWED);
 
       /* Array of chunks of data */
       const data: Uint8Array[] = [];
@@ -28,12 +29,16 @@ export class FileMiddleware {
             const buffer = Buffer.concat(data);
 
             resolve(buffer);
+            return buffer;
+          })
+          .on('error', function (err) {
+            throw new InnerError(`${ErrorMessages.FILE.ERROR_UPLOADING_FILE}. ${err}`);
           });
       });
 
       if (buffer.length > CONFIG.STORAGE.MAX_FILE_SIZE_BYTES)
         throw new InnerError(
-          `${MESSAGE.ERROR.FILE.SIZE_EXCEEDED} Must be <${CONFIG.STORAGE.MAX_FILE_SIZE_BYTES / 1048576}mb`
+          `${ErrorMessages.FILE.SIZE_EXCEEDED} Must be <${CONFIG.STORAGE.MAX_FILE_SIZE_BYTES / 1048576}mb`
         );
 
       /* Writing new content-length size, to avoid confusion */

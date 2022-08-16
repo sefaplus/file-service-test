@@ -1,22 +1,37 @@
 import fs from 'fs';
 import { Logger } from 'tslog';
+import { CONFIG } from '../config';
 import { childLogger } from '../helpers';
-import { FileMetaData } from '../types/types';
+import { FileMetaData } from '../types';
+
 export class LocalStorage {
-  private static readonly log: Logger = childLogger('LocalStorage');
+  private readonly log: Logger = childLogger('LocalStorage');
 
   async saveFile(buffer: Buffer, filename: string, metadata: FileMetaData) {
     const { content_type, content_length } = metadata;
     const ext = content_type.split('/')[1];
-    try {
-      fs.createWriteStream(`tmp/${filename}.${ext}`, {
-        autoClose: true,
-        encoding: 'binary',
-      }).write(buffer);
 
-      return true;
+    try {
+      const result = await new Promise((resolve) => {
+        const path = `${CONFIG.STORAGE.LOCAL_SAVE_PATH}${filename}.${ext}`;
+        const writeSteam = fs
+          .createWriteStream(path, {
+            autoClose: true,
+            encoding: 'binary',
+          })
+          .on('close', () => {
+            this.log.info('Stream Closed');
+            resolve({ filename, size: content_length, mime_type: content_type, path });
+          });
+        writeSteam.write(buffer, () => {
+          writeSteam.close();
+        });
+      });
+
+      return result;
     } catch (err) {
-      console.log(err);
+      this.log.error(err);
+      throw err;
     }
   }
 }

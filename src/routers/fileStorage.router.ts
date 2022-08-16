@@ -1,8 +1,9 @@
 import express from 'express';
-import { FileStorageController } from '../controller';
+import { FileController } from '../controllers';
 import { FileMiddleware } from '../middleware';
 
-export const fileStorageRouter = express.Router();
-fileStorageRouter.get('/:filename', FileStorageController.getFile);
+export const fileRouter = express.Router();
 
-fileStorageRouter.post('/:filename', FileMiddleware.validate, FileStorageController.saveFile);
+fileRouter.get('/:filename', FileController.getFile);
+
+fileRouter.post('/:filename', FileMiddleware.validate, FileController.saveFile);
