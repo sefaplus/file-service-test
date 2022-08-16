@@ -14,10 +14,11 @@ export class FileController {
 
       if (!response) return res.json(getResponse(AnswerStatuses.ERROR, 'FILE NOT FOUND'));
 
+      /* Writing headers so browser knows it's a file for downloading */
       res.writeHead(200, {
         'Content-Type': response.metadata.mime_type,
         'Content-Length': response.metadata.size,
-        'Content-Disposition': `attachment`,
+        'Content-Disposition': `attachment`, // Comment out this line to render the file if possible
       });
       /* Piping ReadStream */
       response.file.pipe(res).on('finish', () => response.file.close());
