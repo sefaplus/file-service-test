@@ -4,6 +4,7 @@ import { CONFIG } from './config';
 import { childLogger } from './helpers';
 import { ErrorHandler } from './middleware/';
 import { fileRouter } from './routers/fileStorage.router';
+import { metadataStorageSingleton } from './singletons';
 
 export default class Server {
   private static readonly log: Logger = childLogger('ServerLog');
@@ -21,6 +22,7 @@ export default class Server {
     Server.app.listen(CONFIG.SERVER.PORT, () => {
       this.log.info(`Server started at ${CONFIG.SERVER.PORT}`);
     });
+    metadataStorageSingleton.getStorage(); // Initiate MongoDB connection
   }
 
   private static settings() {

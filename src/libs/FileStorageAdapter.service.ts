@@ -18,11 +18,9 @@ export class FileStorageAdapter {
         case StorageTypes.FTP:
           storage_type = undefined;
           break;
-
         case StorageTypes.WEBSOCKET:
           storage_type = undefined;
           break;
-
         default:
           storage_type = undefined;
           break;

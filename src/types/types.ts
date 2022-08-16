@@ -3,7 +3,9 @@ export type FileMetaData = {
   content_length: string;
 };
 
-export type StorageActions = {
-  getFile: () => Promise<void>;
-  saveFile: (buffer: Buffer, filename: string, metadata: FileMetaData) => Promise<boolean>;
+export type FileDataObject = {
+  filename: string;
+  size: string;
+  mime_type: string;
+  path: string;
 };
