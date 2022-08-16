@@ -11,6 +11,7 @@ export const ErrorMessages = {
     SIZE_EXCEEDED: 'Maximum file size is exceeded.',
     EXTENSION_DISALLOWED: 'This extenstion is not allowed for upload.',
     ERROR_UPLOADING_FILE: 'There was an error uploading file.',
+    ERROR_SAVING_METADATA: 'There was an error whilst saving file metadata',
   },
   STORAGE: {
     NOT_FOUND: 'There was an error whilst trying to access storage',

@@ -1,1 +1,1 @@
-export * from "./FileStorageAdapter.service";
+export * from './FileStorageGetter';

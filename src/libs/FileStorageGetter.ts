@@ -4,8 +4,8 @@ import { childLogger } from '../helpers';
 import { LocalStorage } from '../service/localStorageService';
 import { StorageTypes } from '../types';
 
-export class FileStorageAdapter {
-  private static readonly log: Logger = childLogger('LocalStorage');
+export class FileStorageGetter {
+  private static readonly log: Logger = childLogger('FileStorageGetter');
 
   static getStorage() {
     try {
