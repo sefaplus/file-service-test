@@ -8,7 +8,7 @@ export const ErrorMessages = {
     CONTENT_TYPE_CANNOT_BE_NULL: 'Content-Type header must be provided for this operation.',
   },
   FILE: {
-    SIZE_EXCEEDED: 'Maximum file size is exceeded.',
+    SIZE_REQUIREMENT_FAILED: 'File size does not meet our requirements.',
     EXTENSION_DISALLOWED: 'This extenstion is not allowed for upload.',
     ERROR_UPLOADING_FILE: 'There was an error uploading file.',
     ERROR_SAVING_METADATA: 'There was an error whilst saving file metadata',

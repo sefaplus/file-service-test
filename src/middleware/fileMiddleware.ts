@@ -36,9 +36,11 @@ export class FileMiddleware {
           });
       });
 
-      if (buffer.length > CONFIG.STORAGE.MAX_FILE_SIZE_BYTES)
+      if (buffer.length > CONFIG.STORAGE.MAX_FILE_SIZE_BYTES || !buffer.length)
         throw new InnerError(
-          `${ErrorMessages.FILE.SIZE_EXCEEDED} Must be <${CONFIG.STORAGE.MAX_FILE_SIZE_BYTES / 1048576}mb`
+          `${ErrorMessages.FILE.SIZE_REQUIREMENT_FAILED} Must be >0b and  <${
+            CONFIG.STORAGE.MAX_FILE_SIZE_BYTES / 1048576
+          }mb `
         );
 
       /* Writing new content-length size, to avoid confusion */

@@ -1,11 +1,23 @@
 import fs from 'fs';
 import { Logger } from 'tslog';
 import { CONFIG } from '../config';
+import { InnerError } from '../constants';
 import { childLogger } from '../helpers';
 import { FileDataObject, FileMetaData } from '../types';
 
 export class LocalStorage {
   private readonly log: Logger = childLogger('LocalStorage');
+
+  async getFile(path: string) {
+    try {
+      return fs.createReadStream(path, { autoClose: true }).on('error', () => {
+        throw new InnerError('Error getting file');
+      });
+    } catch (err) {
+      this.log.error(err);
+      throw err;
+    }
+  }
 
   async saveFile(buffer: Buffer, filename: string, metadata: FileMetaData): Promise<FileDataObject> {
     const { content_type, content_length } = metadata;

@@ -1,15 +1,30 @@
+import { WithId } from 'mongodb';
 import { Logger } from 'tslog';
 import { ErrorMessages, FileStatusMessages, InnerError } from '../constants';
 import { childLogger } from '../helpers';
 import { FileStorageGetter } from '../libs';
 import { metadataStorageSingleton } from '../singletons';
-import { FileMetaData } from '../types';
+import { FileDataObject, FileMetaData } from '../types';
 
 export class StorageService {
   static readonly log: Logger = childLogger('StorageService');
 
-  public static async getFile() {
-    return;
+  public static async getFile(filename: string) {
+    const storage = FileStorageGetter.getStorage();
+    const mongo = await metadataStorageSingleton.getStorage();
+
+    const fetchedMetadata: WithId<FileDataObject> | null | undefined = await new Promise((resolve) =>
+      mongo.findOne({ filename }, (err, response) => {
+        if (err) throw new InnerError('Error fetching file from metadata database');
+
+        resolve(response);
+      })
+    );
+    if (!fetchedMetadata) return undefined;
+
+    const file = await storage.getFile(fetchedMetadata.path);
+
+    return { file, metadata: fetchedMetadata };
   }
   public static async saveFile(buffer: Buffer, filename: string, metadata: FileMetaData) {
     try {
@@ -25,7 +40,7 @@ export class StorageService {
         mongo.findOneAndUpdate(
           { filename: result.filename }, // Filter
           { $set: result }, // New metadata
-          { upsert: true }, // If not exists => create
+          { upsert: true, returnDocument: 'after' }, // If not exists => create
           (err, response) => {
             if (err || !response) throw new InnerError(ErrorMessages.FILE.ERROR_SAVING_METADATA);
 

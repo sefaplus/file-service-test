@@ -7,8 +7,25 @@ import { AnswerStatuses } from '../types';
 export class FileController {
   private static readonly log: Logger = childLogger('FileController');
 
-  static async getFile(req: Request, res: Response) {
-    res.send('answer');
+  static async getFile(req: Request, res: Response, next: NextFunction) {
+    const { filename } = req.params;
+    try {
+      const response = await StorageService.getFile(filename);
+
+      if (!response) return res.json(getResponse(AnswerStatuses.ERROR, 'FILE NOT FOUND'));
+
+      res.writeHead(200, {
+        'Content-Type': response.metadata.mime_type,
+        'Content-Length': response.metadata.size,
+        'Content-Disposition': `attachment`,
+      });
+      /* Piping ReadStream */
+      response.file.pipe(res).on('finish', () => response.file.close());
+    } catch (err) {
+      FileController.log.error(err);
+
+      next(err);
+    }
   }
 
   static async saveFile(req: Request, res: Response, next: NextFunction) {
