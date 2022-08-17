@@ -37,7 +37,7 @@ describe('Middleware', () => {
   });
 });
 describe('Storage adapter', () => {
-  test('getFile \n', () => {
+  test('getFile', () => {
     const storage = FileStorageGetter.getStorage();
 
     return storage.getFile(testFilePath).then((data) => {
@@ -45,7 +45,7 @@ describe('Storage adapter', () => {
     });
   });
 
-  test('saveFile\n', () => {
+  test('saveFile', () => {
     const storage = FileStorageGetter.getStorage();
     const filename = 'otjYQU1lDdCjONSvTUGmuuUUacpTEooF';
     const file = fs.readFileSync(`${__dirname}/mockFiles/file.${testConstants.extension}`);
