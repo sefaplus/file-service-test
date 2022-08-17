@@ -1,36 +1,36 @@
 import { WithId } from 'mongodb';
 import { ErrorMessages } from '../constants';
 import { InnerError } from '../errors';
-import { MongoFileCollection } from '../libs/MongoDB/MongoFileCollection';
+import { MongoDBFileCollection } from '../libs/';
 import { FileDataObject } from '../types';
 
 export class MongoFileService {
   static async fileUpdateAndCreateIfNotExist(file: FileDataObject) {
-    const collection = await MongoFileCollection.getCollection();
+    try {
+      const collection = await MongoDBFileCollection.getCollection();
 
-    return await new Promise((resolve) =>
-      collection.findOneAndUpdate(
+      const response = await collection.findOneAndUpdate(
         { filename: file.filename }, // Filter
         { $set: file }, // New metadata
-        { upsert: true, returnDocument: 'after' }, // If not exists => create
-        (err, response) => {
-          if (err || !response) throw new InnerError(ErrorMessages.FILE.ERROR_SAVING_METADATA);
+        { upsert: true, returnDocument: 'after' } // Create if not exist; return document state after action
+      );
 
-          resolve(response.value);
-        }
-      )
-    );
+      return response.value;
+    } catch (err) {
+      throw new InnerError(ErrorMessages.FILE.ERROR_SAVING_METADATA);
+    }
   }
 
-  static async fileFindOne(filename: string): Promise<WithId<FileDataObject> | null | undefined> {
-    const collection = await MongoFileCollection.getCollection();
+  static async fileFindOne(filename: string): Promise<WithId<FileDataObject>> {
+    try {
+      const collection = await MongoDBFileCollection.getCollection();
+      const response = await collection.findOne({ filename });
 
-    return await new Promise((resolve) =>
-      collection.findOne({ filename }, (err, response) => {
-        if (err) throw new InnerError('Error fetching file from metadata database');
+      if (!response) throw new InnerError(ErrorMessages.STORAGE.ERROR_FETCHING_FILE);
 
-        resolve(response);
-      })
-    );
+      return response;
+    } catch (err) {
+      throw new InnerError(ErrorMessages.STORAGE.ERROR_FETCHING_FILE);
+    }
   }
 }

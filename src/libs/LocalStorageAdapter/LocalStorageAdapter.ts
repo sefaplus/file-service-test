@@ -4,6 +4,7 @@ import { config } from '../../config';
 import { InnerError } from '../../errors';
 import { childLogger } from '../../helpers';
 import { FileDataObject, FileMetaData } from '../../types';
+
 export class LocalStorage {
   private readonly log: Logger = childLogger('LocalStorage');
 

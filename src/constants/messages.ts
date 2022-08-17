@@ -18,5 +18,6 @@ export const ErrorMessages = {
     NOT_FOUND: 'There was an error whilst trying to access storage',
     BAD_TYPE: 'This is not an acceptable file storage system',
     MD_CONN_FAILED: 'Connection to Metadata storage failed.',
+    ERROR_FETCHING_FILE: 'Error fetching file from metadata database',
   },
 };

@@ -12,18 +12,22 @@ export class MongoDBClient {
   private static client: MongoClient;
 
   public static async getStorage() {
-    if (!this.client) await this.connect();
+    try {
+      if (!this.client) await this.connect();
 
-    return this.client;
+      return this.client;
+    } catch (err) {
+      throw new ServiceError(ErrorMessages.STORAGE.MD_CONN_FAILED);
+    }
   }
 
   private static async connect() {
-    this.client = await new Promise((resolve) => {
-      this.mongoClient.connect((err, client) => {
-        if (err || !client) throw new ServiceError(ErrorMessages.STORAGE.MD_CONN_FAILED);
-        log.info('Connected to Metadata storage.');
-        resolve(client);
-      });
-    });
+    try {
+      this.client = await this.mongoClient.connect();
+      log.info('Connected to Metadata storage.');
+    } catch (err) {
+      log.error(err);
+      throw new ServiceError(ErrorMessages.STORAGE.MD_CONN_FAILED);
+    }
   }
 }
