@@ -2,9 +2,9 @@ import express, { Application } from 'express';
 import { Logger } from 'tslog';
 import { config } from './config';
 import { childLogger } from './helpers';
+import { MongoDBClient } from './libs/MongoDB/MongoClient';
 import { ErrorHandler } from './middlewares';
-import { fileRouter } from './routers/fileStorage.router';
-import { metadataStorageSingleton } from './singletons';
+import { fileRouter } from './routers';
 
 export default class Server {
   private static readonly log: Logger = childLogger('ServerLog');
@@ -22,7 +22,7 @@ export default class Server {
     Server.app.listen(config.server.port, () => {
       this.log.info(`Server started at ${config.server.port}`);
     });
-    metadataStorageSingleton.getStorage(); // Initiate MongoDB connection
+    MongoDBClient.getStorage(); // Initiate MongoDB connection
   }
 
   private static settings() {

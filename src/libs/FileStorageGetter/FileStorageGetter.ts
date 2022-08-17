@@ -1,10 +1,11 @@
 import { Logger } from 'tslog';
-import { config } from '../config';
-import { ErrorMessages } from '../constants';
-import { InnerError } from '../errors';
-import { childLogger } from '../helpers';
-import { LocalStorage } from '../service/localStorageService';
-import { StorageTypes } from '../types';
+import { config } from '../../config';
+import { ErrorMessages } from '../../constants';
+import { InnerError } from '../../errors';
+import { childLogger } from '../../helpers';
+import { StorageTypes } from '../../types';
+import { LocalStorage } from '../';
+
 export class FileStorageGetter {
   private static readonly log: Logger = childLogger('FileStorageGetter');
 

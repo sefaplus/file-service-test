@@ -1,15 +1,15 @@
 import { WithId } from 'mongodb';
 import { ErrorMessages } from '../constants';
 import { InnerError } from '../errors';
-import { metadataStorageSingleton } from '../singletons';
+import { MongoFileCollection } from '../libs/MongoDB/MongoFileCollection';
 import { FileDataObject } from '../types';
 
 export class MongoFileService {
   static async fileUpdateAndCreateIfNotExist(file: FileDataObject) {
-    const mongo = await metadataStorageSingleton.getStorage();
+    const collection = await MongoFileCollection.getCollection();
 
     return await new Promise((resolve) =>
-      mongo.findOneAndUpdate(
+      collection.findOneAndUpdate(
         { filename: file.filename }, // Filter
         { $set: file }, // New metadata
         { upsert: true, returnDocument: 'after' }, // If not exists => create
@@ -23,10 +23,10 @@ export class MongoFileService {
   }
 
   static async fileFindOne(filename: string): Promise<WithId<FileDataObject> | null | undefined> {
-    const mongo = await metadataStorageSingleton.getStorage();
+    const collection = await MongoFileCollection.getCollection();
 
     return await new Promise((resolve) =>
-      mongo.findOne({ filename }, (err, response) => {
+      collection.findOne({ filename }, (err, response) => {
         if (err) throw new InnerError('Error fetching file from metadata database');
 
         resolve(response);

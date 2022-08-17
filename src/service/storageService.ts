@@ -4,7 +4,7 @@ import { InnerError } from '../errors';
 import { childLogger } from '../helpers';
 import { FileStorageGetter } from '../libs';
 import { FileMetaData } from '../types';
-import { MongoFileService } from './mongoFileService';
+import { MongoFileService } from './';
 
 export class StorageService {
   static readonly log: Logger = childLogger('StorageService');

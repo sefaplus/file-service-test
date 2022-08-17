@@ -3,7 +3,7 @@ import { Logger } from 'tslog';
 import { ErrorMessages } from '../constants';
 import { InnerError } from '../errors';
 import { childLogger, getResponse } from '../helpers';
-import { StorageService } from '../service/StorageService';
+import { StorageService } from '../service';
 import { AnswerStatuses } from '../types';
 
 export class FileController {
@@ -31,7 +31,7 @@ export class FileController {
     } catch (err) {
       FileController.log.error(err);
 
-      err instanceof InnerError && res.json(getResponse(AnswerStatuses.ERROR, 'FILE NOT FOUND'));
+      if (err instanceof InnerError) res.json(getResponse(AnswerStatuses.ERROR, 'FILE NOT FOUND'));
 
       next(err);
     }

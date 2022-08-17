@@ -1,1 +1,2 @@
-export * from './FileStorageGetter';
+export * from './FileStorageGetter/FileStorageGetter';
+export * from './LocalStorageAdapter/LocalStorageAdapter';
