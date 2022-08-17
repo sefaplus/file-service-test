@@ -7,7 +7,7 @@ import { childLogger } from '../helpers';
 import { AllowedFileTypes } from '../types';
 
 export class FileMiddleware {
-  static readonly log: Logger = childLogger('ServerLog');
+  static readonly log: Logger = childLogger('FileMiddleware');
   /**
    * Checks recieved binary file for allowed extension, and size. Then writes new Content-Length header size, and sets body as buffer of file
    *   */
@@ -64,6 +64,7 @@ export class FileMiddleware {
     try {
       const buffer = req.body;
       const mbInBytes = 1048576;
+
       if (buffer.length > config.storage.maxFileSizeBytes || !buffer.length)
         throw new InnerError(
           `${ErrorMessages.FILE.SIZE_REQUIREMENT_FAILED} Must be >0b and  <${Math.round(
