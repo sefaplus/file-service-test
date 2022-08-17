@@ -22,6 +22,7 @@ export class LocalStorageAdapter {
   async saveFile(buffer: Buffer, filename: string, metadata: FileMetaData): Promise<FileDataObject> {
     const { content_type, content_length } = metadata;
     const ext = content_type.split('/')[1];
+
     try {
       const result = await new Promise((resolve) => {
         const path = `${config.storage.localSavePath}${filename}.${ext}`;
