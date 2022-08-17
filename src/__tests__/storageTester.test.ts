@@ -2,7 +2,7 @@ import fs from 'fs';
 import { config } from '../config';
 import { FileStorageGetter } from '../libs';
 import { FileDataObject } from '../types';
-import { testConstants, testFilePath } from './mocks/mockFileConstants';
+import { fileProperties, testFilePath } from './mocks/constants';
 
 describe('Storage Adapter', () => {
   describe('getFile', () => {
@@ -20,7 +20,7 @@ describe('Storage Adapter', () => {
 
       const filename = 'otjYQU1lDdCjONSvTUGmuuUUacpTEooF';
       const file = fs.readFileSync(testFilePath);
-      const metadata = { content_type: testConstants.content_type, content_length: testConstants.content_length };
+      const metadata = { content_type: fileProperties.content_type, content_length: fileProperties.content_length };
 
       const data = await storage.saveFile(file, filename, metadata);
 
@@ -31,7 +31,7 @@ describe('Storage Adapter', () => {
       });
 
       /* Expected uploaded file path */
-      const expectedPath = `${config.server.root}/${config.storage.localSavePath}${filename}.${testConstants.extension}`;
+      const expectedPath = `${config.server.root}/${config.storage.localSavePath}${filename}.${fileProperties.extension}`;
       /* Check file exists */
       if (!fs.existsSync(expectedPath))
         throw new Error(`File did not save at the expected location of ${expectedPath}`);
@@ -52,5 +52,15 @@ describe('Storage Adapter', () => {
       /* data.path is of type string */
       expect(typeof data.path === 'string').toBeTruthy();
     });
+  });
+
+  it('Should throw', async () => {
+    const storage = FileStorageGetter.getStorage();
+
+    const filename = 'otjYQU1lDdCjONSvTUGmuuUUacpTEooF';
+    const file = undefined;
+    const metadata = { content_type: fileProperties.content_type, content_length: fileProperties.content_length };
+
+    await expect(storage.saveFile(file as any, filename, metadata)).rejects.toThrow();
   });
 });

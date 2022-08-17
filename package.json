@@ -4,7 +4,7 @@
   "description": "A test project of file system service",
   "main": "./src/app.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "start": "node dist/app.js",
     "dev": "nodemon ./src/app.ts",
     "build": "tsc -p ."
