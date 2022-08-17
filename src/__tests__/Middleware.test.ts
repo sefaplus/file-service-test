@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 import { FileMiddleware } from '../middlewares';
-import { testConstants, testFilePath } from './mockFiles/mockFileConstants';
+import { testConstants, testFilePath } from './mocks/mockFileConstants';
 
 describe('Middleware', () => {
   describe('validateHeaders', () => {

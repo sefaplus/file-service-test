@@ -2,7 +2,7 @@ import fs from 'fs';
 import { config } from '../config';
 import { FileStorageGetter } from '../libs';
 import { FileDataObject } from '../types';
-import { testConstants, testFilePath } from './mockFiles/mockFileConstants';
+import { testConstants, testFilePath } from './mocks/mockFileConstants';
 
 describe('Storage Adapter', () => {
   describe('getFile', () => {
@@ -19,7 +19,7 @@ describe('Storage Adapter', () => {
       const storage = FileStorageGetter.getStorage();
 
       const filename = 'otjYQU1lDdCjONSvTUGmuuUUacpTEooF';
-      const file = fs.readFileSync(`${__dirname}/mockFiles/file.${testConstants.extension}`);
+      const file = fs.readFileSync(testFilePath);
       const metadata = { content_type: testConstants.content_type, content_length: testConstants.content_length };
 
       const data = await storage.saveFile(file, filename, metadata);
