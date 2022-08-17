@@ -1,11 +1,10 @@
-import { FileStorageGetter } from '../libs';
+import { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 import { config } from '../config';
-import { FileDataObject } from '../types';
-import Server from '../server';
-import { Request, Response, NextFunction } from 'express';
+import { FileStorageGetter } from '../libs';
 import { FileMiddleware } from '../middlewares';
-import { PassThrough } from 'stream';
+import Server from '../server';
+import { FileDataObject } from '../types';
 /* Test constants, must correspond to the file being tested */
 const testConstants = {
   extension: 'png', // Extension of a file to be used for testing
