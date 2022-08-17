@@ -13,5 +13,6 @@ export const config = {
   },
   server: {
     port: process.env.SERVER_PORT || 5000,
+    root: __dirname.split('/').slice(0, -2).join('/'),
   },
 };

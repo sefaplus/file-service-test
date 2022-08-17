@@ -1,0 +1,8 @@
+/* Test constants, must correspond to the file being tested */
+export const testConstants = {
+  extension: 'png', // Extension of a file to be used for testing
+  content_type: 'image/png', // Mime type of the file to be used for testing
+  content_length: '14338', // Size in bytes of the file to be tested
+};
+
+export const testFilePath = `${__dirname}/file.${testConstants.extension}`; // Path to test file
