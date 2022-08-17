@@ -13,7 +13,7 @@ services:
      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASS}
      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
     volumes:
-      - ./mongo-init/:/docker-entrypoint-initdb.d/:ro
+      - ./migrations/:/docker-entrypoint-initdb.d/:ro
 
   mongo-express:
     image: mongo-express

@@ -32,7 +32,8 @@ export default class Server {
 
   static applyRouters() {
     Server.app.use('/files', fileRouter);
-    Server.app.use('/', (req, res) => res.sendFile('./pages/index.html', { root: __dirname }));
+    /* Simple interface for testing */
+    Server.app.use('/interface', (req, res) => res.sendFile('./pages/testInterface.html', { root: __dirname }));
   }
   static applyErrorHandler() {
     Server.app.use(ErrorHandler.globalErrorHandler);
