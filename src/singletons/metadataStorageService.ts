@@ -1,10 +1,15 @@
 import { Collection, MongoClient } from 'mongodb';
-import { CONFIG } from '../config';
-import { ServiceError } from '../constants';
+import { Logger } from 'tslog';
+import { config } from '../config';
+import { ErrorMessages } from '../constants';
+import { ServiceError } from '../errors';
+import { childLogger } from '../helpers';
 import { FileDataObject } from '../types';
 
+const log: Logger = childLogger('Metadata Storage');
+
 export class metadataStorageSingleton {
-  private static mongoClient = new MongoClient(CONFIG.STORAGE.MONGO_ACCESS_URL);
+  private static mongoClient = new MongoClient(config.storage.mongoAccessUrl);
   private static storage: Collection<FileDataObject>;
 
   public static async getStorage() {
@@ -16,9 +21,9 @@ export class metadataStorageSingleton {
   private static async connect() {
     this.storage = await new Promise((resolve) => {
       this.mongoClient.connect((err, client) => {
-        if (err || !client) throw new ServiceError('MongoDB Connection failed.');
-        console.log('Connected');
-        resolve(client.db('FilesDB').collection('files'));
+        if (err || !client) throw new ServiceError(ErrorMessages.STORAGE.MD_CONN_FAILED);
+        log.info('Connected to Metadata storage.');
+        resolve(client.db(config.storage.mongoDbName).collection('files'));
       });
     });
   }

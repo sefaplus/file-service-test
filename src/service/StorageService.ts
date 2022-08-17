@@ -1,5 +1,6 @@
 import { Logger } from 'tslog';
-import { FileStatusMessages } from '../constants';
+import { ErrorMessages, FileStatusMessages } from '../constants';
+import { InnerError } from '../errors';
 import { childLogger } from '../helpers';
 import { FileStorageGetter } from '../libs';
 import { FileMetaData } from '../types';
@@ -10,11 +11,12 @@ export class StorageService {
 
   public static async getFile(filename: string) {
     const storage = FileStorageGetter.getStorage();
-    const fetchedMetadata = await MongoFileService.fileFindOne(filename);
 
-    if (!fetchedMetadata) return undefined;
+    const fetchedMetadata = await MongoFileService.fileFindOne(filename);
+    if (!fetchedMetadata) throw new InnerError(ErrorMessages.FILE.NOT_FOUND);
 
     const file = await storage.getFile(fetchedMetadata.path);
+    if (!file) throw new InnerError(ErrorMessages.FILE.NOT_FOUND);
 
     return { file, metadata: fetchedMetadata };
   }
@@ -23,14 +25,14 @@ export class StorageService {
     try {
       const storage = FileStorageGetter.getStorage();
 
-      this.log.info(FileStatusMessages.FILE_RECIEVED);
+      this.log.info(`${FileStatusMessages.FILE_RECIEVED} {${filename}}`);
 
       /* File saved to local drive result, returns FileDataObject, containing required metadata for mongoDb*/
       const result = await storage.saveFile(buffer, filename, metadata);
       /* Saving metadata in mongodb */
       const response = await MongoFileService.fileUpdateAndCreateIfNotExist(result);
 
-      this.log.info(FileStatusMessages.FILE_UPLOADED);
+      this.log.info(`${FileStatusMessages.FILE_UPLOADED} {${filename}}`);
       return response;
     } catch (err) {
       this.log.error(err);

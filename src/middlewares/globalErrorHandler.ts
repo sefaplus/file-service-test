@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Logger } from 'tslog';
-import { InnerError } from '../constants';
+import { InnerError } from '../errors';
 import { childLogger, getResponse } from '../helpers';
 import { AnswerStatuses, ServerStatusCodes } from '../types';
 
@@ -15,12 +15,12 @@ export class ErrorHandler {
       const response = getResponse(AnswerStatuses.ERROR, err.message);
 
       return res.status(err.status).json(response);
-    } else {
-      ErrorHandler.log.error(err.message);
-
-      const response = getResponse(AnswerStatuses.ERROR, 'Internal server error');
-
-      return res.status(ServerStatusCodes.INTERNAL_SERVER_ERROR).json(response);
     }
+
+    ErrorHandler.log.error(err.message);
+
+    const response = getResponse(AnswerStatuses.ERROR, 'Internal server error');
+
+    return res.status(ServerStatusCodes.INTERNAL_SERVER_ERROR).json(response);
   }
 }

@@ -2,9 +2,9 @@ import { Logger } from 'tslog';
 import { childLogger } from './helpers';
 import Server from './server';
 
-Server.startApp();
-
 const log: Logger = childLogger('App Log');
+
+Server.startApp();
 
 process.on('SIGINT', () => {
   log.error('Received SIGINT');

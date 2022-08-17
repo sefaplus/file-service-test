@@ -1,9 +1,10 @@
 import { Logger } from 'tslog';
-import { CONFIG, ErrorMessages, InnerError } from '../constants';
+import { config } from '../config';
+import { ErrorMessages } from '../constants';
+import { InnerError } from '../errors';
 import { childLogger } from '../helpers';
 import { LocalStorage } from '../service/localStorageService';
 import { StorageTypes } from '../types';
-
 export class FileStorageGetter {
   private static readonly log: Logger = childLogger('FileStorageGetter');
 
@@ -11,7 +12,7 @@ export class FileStorageGetter {
     try {
       let storage_type;
 
-      switch (CONFIG.STORAGE.TYPE) {
+      switch (config.storage.type) {
         case StorageTypes.LOCAL:
           storage_type = new LocalStorage();
           break;

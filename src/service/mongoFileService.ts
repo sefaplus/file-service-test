@@ -1,5 +1,6 @@
 import { WithId } from 'mongodb';
-import { ErrorMessages, InnerError } from '../constants';
+import { ErrorMessages } from '../constants';
+import { InnerError } from '../errors';
 import { metadataStorageSingleton } from '../singletons';
 import { FileDataObject } from '../types';
 

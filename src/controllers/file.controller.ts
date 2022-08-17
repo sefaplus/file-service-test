@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Logger } from 'tslog';
+import { ErrorMessages } from '../constants';
+import { InnerError } from '../errors';
 import { childLogger, getResponse } from '../helpers';
 import { StorageService } from '../service/StorageService';
 import { AnswerStatuses } from '../types';
@@ -9,10 +11,9 @@ export class FileController {
 
   static async getFile(req: Request, res: Response, next: NextFunction) {
     const { filename } = req.params;
+
     try {
       const response = await StorageService.getFile(filename);
-
-      if (!response) return res.json(getResponse(AnswerStatuses.ERROR, 'FILE NOT FOUND'));
 
       /* Writing headers so browser knows it's a file for downloading */
       res.writeHead(200, {
@@ -21,9 +22,16 @@ export class FileController {
         'Content-Disposition': `attachment`, // Comment out this line to render the file if possible
       });
       /* Piping ReadStream */
-      response.file.pipe(res).on('finish', () => response.file.close());
+      response.file
+        .pipe(res)
+        .on('finish', () => response.file.close())
+        .on('error', () => {
+          throw new InnerError(ErrorMessages.FILE.ERROR_UPLOADING_FILE);
+        });
     } catch (err) {
       FileController.log.error(err);
+
+      err instanceof InnerError && res.json(getResponse(AnswerStatuses.ERROR, 'FILE NOT FOUND'));
 
       next(err);
     }

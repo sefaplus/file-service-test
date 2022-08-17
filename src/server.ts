@@ -1,8 +1,8 @@
 import express, { Application } from 'express';
 import { Logger } from 'tslog';
-import { CONFIG } from './config';
+import { config } from './config';
 import { childLogger } from './helpers';
-import { ErrorHandler } from './middleware/';
+import { ErrorHandler } from './middlewares';
 import { fileRouter } from './routers/fileStorage.router';
 import { metadataStorageSingleton } from './singletons';
 
@@ -19,8 +19,8 @@ export default class Server {
 
   public static async startApp() {
     Server.initServer();
-    Server.app.listen(CONFIG.SERVER.PORT, () => {
-      this.log.info(`Server started at ${CONFIG.SERVER.PORT}`);
+    Server.app.listen(config.server.port, () => {
+      this.log.info(`Server started at ${config.server.port}`);
     });
     metadataStorageSingleton.getStorage(); // Initiate MongoDB connection
   }

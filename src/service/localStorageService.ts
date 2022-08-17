@@ -1,10 +1,9 @@
 import fs from 'fs';
 import { Logger } from 'tslog';
-import { CONFIG } from '../config';
-import { InnerError } from '../constants';
+import { config } from '../config';
+import { InnerError } from '../errors';
 import { childLogger } from '../helpers';
 import { FileDataObject, FileMetaData } from '../types';
-
 export class LocalStorage {
   private readonly log: Logger = childLogger('LocalStorage');
 
@@ -25,14 +24,14 @@ export class LocalStorage {
 
     try {
       const result = await new Promise((resolve) => {
-        const path = `${CONFIG.STORAGE.LOCAL_SAVE_PATH}${filename}.${ext}`;
+        const path = `${config.storage.localSavePath}${filename}.${ext}`;
         const writeSteam = fs
           .createWriteStream(path, {
             autoClose: true,
             encoding: 'binary',
           })
           .on('error', () => {
-            throw new Error('Error saving file');
+            throw new InnerError('Error saving file');
           });
 
         writeSteam.write(buffer, () => {

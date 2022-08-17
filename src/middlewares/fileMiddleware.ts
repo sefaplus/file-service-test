@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { CONFIG, ErrorMessages, InnerError } from '../constants';
+import { config } from '../config';
+import { ErrorMessages } from '../constants';
+import { InnerError } from '../errors';
 import { AllowedFileTypes } from '../types';
 
 export class FileMiddleware {
@@ -36,11 +38,11 @@ export class FileMiddleware {
           });
       });
 
-      if (buffer.length > CONFIG.STORAGE.MAX_FILE_SIZE_BYTES || !buffer.length)
+      if (buffer.length > config.storage.maxFileSizeBytes || !buffer.length)
         throw new InnerError(
-          `${ErrorMessages.FILE.SIZE_REQUIREMENT_FAILED} Must be >0b and  <${
-            CONFIG.STORAGE.MAX_FILE_SIZE_BYTES / 1048576
-          }mb `
+          `${ErrorMessages.FILE.SIZE_REQUIREMENT_FAILED} Must be >0b and  <${Math.round(
+            config.storage.maxFileSizeBytes / 1048576
+          )}mb `
         );
 
       /* Writing new content-length size, to avoid confusion */
