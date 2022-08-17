@@ -8,8 +8,8 @@ import { fileRouter } from './routers';
 
 export default class Server {
   private static readonly log: Logger = childLogger('ServerLog');
-  private static app: Application;
-
+  public static app: Application;
+  public static rootFolder = `${__dirname}`;
   private static initServer() {
     Server.app = express();
     Server.settings();
