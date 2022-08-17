@@ -13,3 +13,4 @@ db.files.insert({
   mime_type: 'null/null',
   path: '/null.null',
 });
+db.files.findOneAndDelete({ filename: 'initial' });

@@ -44,9 +44,10 @@ export class FileController {
         req.headers['content-type'] as string,
         req.headers['content-length'] as string,
       ];
+      const buffer: Buffer = req.body;
       const { filename } = req.params;
 
-      const response = await StorageService.saveFile(req.body, filename, { content_type, content_length });
+      const response = await StorageService.saveFile(buffer, filename, { content_type, content_length });
 
       res.json(getResponse(AnswerStatuses.SUCCESS, { uploaded: response }));
     } catch (err) {

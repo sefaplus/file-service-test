@@ -6,4 +6,10 @@ export const fileRouter = express.Router();
 
 fileRouter.get('/:filename', FileController.getFile);
 
-fileRouter.post('/:filename', FileMiddleware.validate, FileController.saveFile);
+fileRouter.post(
+  '/:filename',
+  FileMiddleware.validateHeaders,
+  FileMiddleware.supplyRequestWithFile,
+  FileMiddleware.validateFile,
+  FileController.saveFile
+);

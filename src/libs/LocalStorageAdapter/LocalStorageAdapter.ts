@@ -5,7 +5,7 @@ import { InnerError } from '../../errors';
 import { childLogger } from '../../helpers';
 import { FileDataObject, FileMetaData } from '../../types';
 
-export class LocalStorage {
+export class LocalStorageAdapter {
   private readonly log: Logger = childLogger('LocalStorage');
 
   async getFile(path: string) {

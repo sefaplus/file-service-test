@@ -4,7 +4,7 @@ import { ErrorMessages } from '../../constants';
 import { InnerError } from '../../errors';
 import { childLogger } from '../../helpers';
 import { StorageTypes } from '../../types';
-import { LocalStorage } from '../';
+import { LocalStorageAdapter } from '../';
 
 export class FileStorageGetter {
   private static readonly log: Logger = childLogger('FileStorageGetter');
@@ -15,7 +15,7 @@ export class FileStorageGetter {
 
       switch (config.storage.type) {
         case StorageTypes.LOCAL:
-          storage_type = new LocalStorage();
+          storage_type = new LocalStorageAdapter();
           break;
         case StorageTypes.FTP:
           storage_type = undefined;
