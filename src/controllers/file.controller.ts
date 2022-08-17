@@ -39,6 +39,7 @@ export class FileController {
 
   static async saveFile(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log('GOT IT', req.body);
       /* Forcing types because these were checked and provided in file validator */
       const [content_type, content_length] = [
         req.headers['content-type'] as string,

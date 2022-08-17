@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title> File Upload test app</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #c9c9c9;
+            }
+            .uploadBox {
+                width: 600px;
+                min-height: 200px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 2em;
+                padding-top: 100px;
+                padding-bottom: 100px;
+                background-color: #fdfdff;
+                border-radius: 0.5em;
+                box-shadow: 2px 3px 7px 2px rgb(0 0 0 / 2%);
+                display: flex;
+                flex-direction: column;
+                flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+            }
+        </style>
+        
+    </head>
+    <body>
+        <div class="uploadBox">
+            <label for="filename">Filename</label>
+            <input type="text" id="filename"> </input>
+            <input type="file" id="file"> </input>
+            <h2> STATUS: </h2>
+            <p id="status"> </p>
+            <button style="max-width: 20%" onclick=sendFile()> UPLOAD</button>
+        </div>
+        <script >
+            async function sendFile() {
+                const fileSelector = document.getElementById('file');
+                const filename = document.getElementById('filename').value;
+                const statusText = document.getElementById('status');
+                const file = fileSelector.files[0]
+
+                const response = await fetch(`http://localhost:5000/files/${filename}`, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: { "Content-Type": file.type, 'Content-Length': file.size,  },
+                    body: file,
+                })
+                    .then((json) => json.json()
+                    )
+                    .catch((err) => {
+                    console.error("Error:", err)
+                    statusText.innerHTML = 'Error during request, check console'
+                    }); 
+                    console.log(response)
+                statusText.innerHTML = `check file at <a href='http://localhost:5000/files/${response.data.uploaded.filename}'> http://localhost:5000/files/${response.data.uploaded.filename} </a>`
+                }
+
+        </script>
+    </body>
+</html>
