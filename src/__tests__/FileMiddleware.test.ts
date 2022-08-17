@@ -1,12 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 import { config } from '../config';
-import { ErrorMessages } from '../constants';
-import { InnerError } from '../errors';
 import { FileMiddleware } from '../middlewares';
 import { fileProperties, testFilePath } from './mocks/constants';
 
-describe('Middleware', () => {
+describe('FileMiddleware', () => {
   describe('validateHeaders', () => {
     it('Should not throw', async () => {
       /* Mock request containing required fields for testing */

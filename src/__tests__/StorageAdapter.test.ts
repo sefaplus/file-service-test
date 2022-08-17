@@ -31,7 +31,7 @@ describe('Storage Adapter', () => {
       });
 
       /* Expected uploaded file path */
-      const expectedPath = `${config.server.root}/${config.storage.localSavePath}${filename}.${fileProperties.extension}`;
+      const expectedPath = `${config.server.rootDir}/${config.storage.localSavePath}${filename}.${fileProperties.extension}`;
       /* Check file exists */
       if (!fs.existsSync(expectedPath))
         throw new Error(`File did not save at the expected location of ${expectedPath}`);
@@ -61,6 +61,6 @@ describe('Storage Adapter', () => {
     const file = undefined;
     const metadata = { content_type: fileProperties.content_type, content_length: fileProperties.content_length };
 
-    await expect(storage.saveFile(file as any, filename, metadata)).rejects.toThrow();
+    await expect(storage.saveFile(file as unknown as Buffer, filename, metadata)).rejects.toThrow();
   });
 });
