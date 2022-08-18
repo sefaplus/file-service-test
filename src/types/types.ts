@@ -8,4 +8,10 @@ export type FileDataObject = {
   size: string;
   mime_type: string;
   path: string;
+  extension: string;
+};
+
+export type AllowedFileTypesItem = {
+  uploadedType: string;
+  extenstion: string;
 };
