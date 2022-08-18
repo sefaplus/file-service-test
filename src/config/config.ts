@@ -12,7 +12,7 @@ export const config = {
     mongoDbName: process.env.MONGO_DB_NAME || 'FilesDb',
   },
   server: {
-    port: process.env.SERVER_PORT || 5000,
+    port: process.env.PORT || 5000,
     rootDir: __dirname.split('/').slice(0, -2).join('/'),
   },
 };
