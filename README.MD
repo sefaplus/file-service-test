@@ -1,24 +1,8 @@
-# Enviromental variables example
+# What the app does
 
-## SERVER
+This a service app that accepts any ongoind POST requests to `domain/files/:filename` and saves the attached binary to the request, with the filename. As well as saving the metadata of this file to MongoDB.
 
-```
-STORAGE_TYPE=LOCAL
-MAX_FILE_LIMIT=100
-PORT=5000
-USING_DOCKER_COMPOSE=0
-LOCAL_SAVE_PATH=tmp/
-```
-
-## MONGO
-
-```
-MONGO_ROOT_USER=mongouser
-MONGO_ROOT_PASS=mongopass
-MONGO_URL=mongodb://mongouser:mongopass@mongo:27017/
-MONGO_CLOUD_URL=mongodb+srv://mongouser:mongopass@database.gxoqj.mongodb.net/?retryWrites=true&w=majority
-MONGO_DB_NAME=FilesDB
-```
+It also returns the files, that have already been uploaded, by doing a GET request to `domain/files/:filename`, returning the file.
 
 # Configuration
 
@@ -49,3 +33,22 @@ If youre using docker compose, change `USING_DOCKER_COMPOSE` to `1`
 `MONGO_CLOUD_URL` - a cloud mongo url with credentials
 
 `MONGO_DB_NAME` - database name to use
+
+# HOW TO START
+
+## Entirely local:
+
+Make sure you have `docker` and `docker-compose` installed.
+
+1. In the .env file, change `USING_DOCKER_COMPOSE` variable to `1` if not already set.
+
+2. Navigate to the root directory where `docker-compose.yml` lays, open in terminal and run `docker-compose up --build`.
+   This should start the containers and you can then access the final app on `http://localhost:5000`.
+
+## Server local / MongoDB cloud based
+
+1. In the .env file, change `USING_DOCKER_COMPOSE` variable to `0` if not already set.
+2. In the .env file, change `MONGO_CLOUD_URL` to the provided URL from your host. Which rougly looks like this: `mongodb+srv://mongouser:mongopass@database.gxoqj.mongodb.net/?retryWrites=true&w=majority`
+3. Open terminal in the root directory, and run `npm run build`, to build js.
+4. Then run `npm start` to start the server.
+5. You can access the final app on `http://localhost:5000`.
