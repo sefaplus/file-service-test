@@ -43,7 +43,7 @@ Make sure you have `docker` and `docker-compose` installed.
 1. In the .env file, change `USING_DOCKER_COMPOSE` variable to `1` if not already set.
 
 2. Navigate to the root directory where `docker-compose.yml` lays, open in terminal and run `docker-compose up --build`.
-   This should start the containers and you can then access the final app on `http://localhost:5000`.
+   This should start the containers and you can then access the final app on `http://localhost:env.PORT`.
 
 ## Server local / MongoDB cloud based
 
@@ -51,4 +51,4 @@ Make sure you have `docker` and `docker-compose` installed.
 2. In the .env file, change `MONGO_CLOUD_URL` to the provided URL from your host. Which rougly looks like this: `mongodb+srv://mongouser:mongopass@database.gxoqj.mongodb.net/?retryWrites=true&w=majority`
 3. Open terminal in the root directory, and run `npm run build`, to build js.
 4. Then run `npm start` to start the server.
-5. You can access the final app on `http://localhost:5000`.
+5. You can access the final app on `http://localhost:env.PORT`.
