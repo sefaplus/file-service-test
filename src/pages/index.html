@@ -46,7 +46,6 @@
                 const filename = document.getElementById('filename').value;
                 const statusText = document.getElementById('status');
                 const file = fileSelector.files[0]
-                
                 const response = await fetch(`http://localhost:5000/files/${filename}`, {
                     method: "POST",
                     mode: "cors",

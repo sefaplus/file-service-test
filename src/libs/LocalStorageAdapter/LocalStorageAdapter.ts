@@ -3,7 +3,7 @@ import { Logger } from 'tslog';
 import { config } from '../../config';
 import { InnerError } from '../../errors';
 import { childLogger } from '../../helpers';
-import { AllowedFileTypes, FileDataObject, FileMetaData } from '../../types';
+import { AllowedFileTypes, AllowedFileTypesItem, FileDataObject, FileMetaData } from '../../types';
 
 export class LocalStorageAdapter {
   private readonly log: Logger = childLogger('LocalStorage');
@@ -21,7 +21,10 @@ export class LocalStorageAdapter {
 
   async saveFile(buffer: Buffer, filename: string, metadata: FileMetaData): Promise<FileDataObject> {
     const { content_type, content_length } = metadata;
-    const extension = Object.values(AllowedFileTypes).find((v) => v.uploadedType === content_type)?.extenstion;
+    const extension = Object.values(AllowedFileTypes).find(
+      (item: AllowedFileTypesItem) => item.uploadedType === content_type
+    )?.extenstion;
+
     try {
       const result = await new Promise((resolve) => {
         const path = `${config.storage.localSavePath}${filename}.${extension}`;

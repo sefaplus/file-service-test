@@ -4,7 +4,7 @@ import { config } from '../config';
 import { ErrorMessages } from '../constants';
 import { InnerError } from '../errors';
 import { childLogger } from '../helpers';
-import { AllowedFileTypes } from '../types';
+import { AllowedFileTypes, AllowedFileTypesItem } from '../types';
 
 export class FileMiddleware {
   static readonly log: Logger = childLogger('FileMiddleware');
@@ -19,7 +19,7 @@ export class FileMiddleware {
       if (!recievedContentTypes) throw new InnerError(ErrorMessages.HEADER.CONTENT_TYPE_CANNOT_BE_NULL);
 
       /* If header Content-Type of not allowed extensions, throw err */
-      if (!allowedContentTypes.some((v) => v.uploadedType === recievedContentTypes))
+      if (!allowedContentTypes.some((item: AllowedFileTypesItem) => item.uploadedType === recievedContentTypes))
         throw new InnerError(ErrorMessages.FILE.EXTENSION_DISALLOWED);
       next();
     } catch (err) {

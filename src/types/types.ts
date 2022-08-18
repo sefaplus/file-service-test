@@ -10,3 +10,8 @@ export type FileDataObject = {
   path: string;
   extension: string;
 };
+
+export type AllowedFileTypesItem = {
+  uploadedType: string;
+  extenstion: string;
+};
