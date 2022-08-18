@@ -14,14 +14,13 @@ export class FileMiddleware {
   static async validateHeaders(req: Request, res: Response, next: NextFunction) {
     try {
       const allowedContentTypes = Object.values(AllowedFileTypes);
-      const recievedContentTypes = req.headers['content-type'] as AllowedFileTypes;
+      const recievedContentTypes = req.headers['content-type'];
 
       if (!recievedContentTypes) throw new InnerError(ErrorMessages.HEADER.CONTENT_TYPE_CANNOT_BE_NULL);
 
       /* If header Content-Type of not allowed extensions, throw err */
-      if (!allowedContentTypes.includes(recievedContentTypes))
+      if (!allowedContentTypes.some((v) => v.uploadedType === recievedContentTypes))
         throw new InnerError(ErrorMessages.FILE.EXTENSION_DISALLOWED);
-
       next();
     } catch (err) {
       FileMiddleware.log.warn(err);
@@ -71,6 +70,7 @@ export class FileMiddleware {
             config.storage.maxFileSizeBytes / mbInBytes
           )}mb `
         );
+      next();
     } catch (err) {
       FileMiddleware.log.warn(err);
       return next(err);

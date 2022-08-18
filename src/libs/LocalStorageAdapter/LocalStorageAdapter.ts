@@ -3,7 +3,7 @@ import { Logger } from 'tslog';
 import { config } from '../../config';
 import { InnerError } from '../../errors';
 import { childLogger } from '../../helpers';
-import { FileDataObject, FileMetaData } from '../../types';
+import { AllowedFileTypes, FileDataObject, FileMetaData } from '../../types';
 
 export class LocalStorageAdapter {
   private readonly log: Logger = childLogger('LocalStorage');
@@ -21,11 +21,10 @@ export class LocalStorageAdapter {
 
   async saveFile(buffer: Buffer, filename: string, metadata: FileMetaData): Promise<FileDataObject> {
     const { content_type, content_length } = metadata;
-    const ext = content_type.split('/')[1];
-
+    const extension = Object.values(AllowedFileTypes).find((v) => v.uploadedType === content_type)?.extenstion;
     try {
       const result = await new Promise((resolve) => {
-        const path = `${config.storage.localSavePath}${filename}.${ext}`;
+        const path = `${config.storage.localSavePath}${filename}.${extension}`;
         const writeSteam = fs
           .createWriteStream(path, {
             autoClose: true,
@@ -40,7 +39,7 @@ export class LocalStorageAdapter {
         });
 
         writeSteam.on('close', () => {
-          resolve({ filename, size: content_length, mime_type: content_type, path } as FileDataObject);
+          resolve({ filename, size: content_length, mime_type: content_type, path, extension } as FileDataObject);
         });
       });
 

@@ -8,4 +8,5 @@ export type FileDataObject = {
   size: string;
   mime_type: string;
   path: string;
+  extension: string;
 };
