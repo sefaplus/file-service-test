@@ -5,13 +5,13 @@ import { MongoDBFileCollection } from '../libs/';
 import { FileDataObject } from '../types';
 
 export class MongoFileService {
-  static async fileUpdateAndCreateIfNotExist(file: FileDataObject) {
+  static async fileUpdateAndCreateIfNotExist(metadata: FileDataObject) {
     try {
       const collection = await MongoDBFileCollection.getCollection();
 
       const response = await collection.findOneAndUpdate(
-        { filename: file.filename }, // Filter
-        { $set: file }, // New metadata
+        { filename: metadata.filename }, // Filter
+        { $set: metadata }, // New metadata
         { upsert: true, returnDocument: 'after' } // Create if not exist; return document state after action
       );
 

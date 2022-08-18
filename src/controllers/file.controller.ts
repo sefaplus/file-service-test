@@ -19,7 +19,7 @@ export class FileController {
       res.writeHead(200, {
         'Content-Type': response.metadata.mime_type,
         'Content-Length': response.metadata.size,
-        'Content-Disposition': `attachment`, // Comment out this line to render the file if possible
+        'Content-Disposition': `attachment; filename=${response.metadata.filename}.${response.metadata.extension}`,
       });
       /* Piping ReadStream */
       response.file

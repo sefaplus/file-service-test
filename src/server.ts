@@ -5,6 +5,12 @@ import { childLogger } from './helpers';
 import { MongoDBClient } from './libs/MongoDB/MongoDBClient';
 import { ErrorHandler } from './middlewares';
 import { fileRouter } from './routers';
+import cors from 'cors';
+
+const corsOptions = {
+  origin: `http://localhost:${config.server.port}`,
+  optionsSuccessStatus: 200,
+};
 
 export default class Server {
   private static readonly log: Logger = childLogger('ServerLog');
@@ -33,6 +39,7 @@ export default class Server {
   private static settings() {
     Server.app.use(express.urlencoded({ extended: true }));
     Server.app.use(express.json());
+    Server.app.use(cors(corsOptions));
   }
 
   static applyRouters() {
